@@ -1,0 +1,75 @@
+﻿@model adddemo.Models.MyAdvertiseModel
+
+@{
+    ViewBag.Title = "Edit Advertisement";
+}
+
+<h2>Edit Advertisement</h2>
+
+@using (Html.BeginForm("Edit", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.advertiseTitle, "Title")
+        @Html.EditorFor(model => model.advertiseTitle, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.advertiseTitle, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.advertiseDescription, "Description")
+        @Html.TextAreaFor(model => model.advertiseDescription, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.advertiseDescription, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.advertisePrice, "Price")
+        @Html.EditorFor(model => model.advertisePrice, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.advertisePrice, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.advertiseStatus, "Status")
+        @Html.CheckBoxFor(model => model.advertiseStatus, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.advertiseStatus, "", new { @class = "text-danger" })
+    </div>
+
+
+
+    <div class="form-group">
+        <button type="button" id="saveButton" class="btn btn-primary">Save</button>
+    </div>
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Attach a click event handler to the "Save" button
+        $("#saveButton").click(function () {
+            // Serialize the form data
+            var formData = $("#myForm").serialize();
+
+            // Send a POST request to the server-side action (replace 'Edit' with your action method name)
+            $.ajax({
+                type: "POST",
+                url: "/Home/Edit", // Replace with the correct URL
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        // Handle the success response (e.g., show a success message)
+                        alert("Data saved successfully!");
+                    } else {
+                        // Handle errors returned by the server (e.g., validation errors)
+                        alert("Failed to save data: " + response.message);
+                    }
+                },
+                error: function (error) {
+                    // Handle AJAX errors (e.g., network issues)
+                    alert("An error occurred: " + error.statusText);
+                }
+            });
+        });
+    });
+
+</script>
+
+

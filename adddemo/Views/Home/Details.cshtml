@@ -1,0 +1,58 @@
+﻿@model adddemo.Models.MyAdvertiseModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>MyAdvertiseModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.advertiseId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.advertiseId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.advertiseTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.advertiseTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.advertiseDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.advertiseDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.advertisePrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.advertisePrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.advertiseStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.advertiseStatus)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

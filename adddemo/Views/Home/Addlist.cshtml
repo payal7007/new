@@ -1,0 +1,131 @@
+﻿@model IEnumerable<adddemo.Models.MyAdvertiseModel>
+
+@{
+    ViewBag.Title = "Addlist";
+}
+<h2>@ViewBag.SuccessMessage</h2>
+<h2>@ViewBag.ErrorMessage</h2>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Addlist</title>
+    <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</head>
+<body>
+    <h2>Addlist</h2>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.advertiseTitle)</th>
+                <th>@Html.DisplayNameFor(model => model.advertiseDescription)</th>
+                <th>@Html.DisplayNameFor(model => model.advertisePrice)</th>
+                <th>@Html.DisplayNameFor(model => model.advertiseStatus)</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ad in Model)
+            {
+                <tr>
+                    <td>@ad.advertiseTitle</td>
+                    <td>@ad.advertiseDescription</td>
+                    <td>@ad.advertisePrice</td>
+                    <td class="status-text">@ad.advertiseStatus</td>
+                    <td>
+                        @Html.ActionLink("View Details", "Details", new { id = ad.advertiseId })
+                        @Html.ActionLink("Edit", "Edit",  new { id = ad.advertiseId }, null)
+
+                        <button type="button" class="btn btn-success approve-button" data-advertise-id="@ad.advertiseId">Approve</button>
+                        <button type="button" class="btn btn-danger reject-button" data-advertise-id="@ad.advertiseId">Reject</button>
+                        @Html.ActionLink("Delete", "Delete", new { advertiseId = ad.advertiseId }, new { onclick = "return confirm('Are you sure you want to delete this record?');" })
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var approveButtons = document.querySelectorAll('.approve-button');
+            approveButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var advertiseId = button.getAttribute('data-advertise-id');
+                    var statusElement = button.closest('tr').querySelector('.status-text');
+
+                    // Make an AJAX request to the server to approve the advertisement
+                    $.ajax({
+                        url: '/Home/ApproveAdvertisement', // Replace with the correct URL
+                        type: 'POST',
+                        data: { advertiseId: advertiseId },
+                        success: function (data) {
+                            if (data.success) {
+                                statusElement.textContent = 'Approved';
+                                showToast('Item approved successfully!', 'green');
+                            } else {
+                                showToast('Failed to approve item!', 'red');
+                            }
+                        },
+                        error: function () {
+                            showToast('Failed to communicate with the server!', 'red');
+                        }
+                    });
+                });
+            });
+
+            var rejectButtons = document.querySelectorAll('.reject-button');
+            rejectButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var advertiseId = button.getAttribute('data-advertise-id');
+                    var statusElement = button.closest('tr').querySelector('.status-text');
+
+                    // Make an AJAX request to the server to reject the advertisement
+                    $.ajax({
+                        url: '/Home/RejectAdvertisement', // Replace with the correct URL
+                        type: 'POST',
+                        data: { advertiseId: advertiseId },
+                        success: function (data) {
+                            if (data.success) {
+                                statusElement.textContent = 'Rejected';
+                                showToast('Item rejected successfully!', 'red');
+                            } else {
+                                showToast('Failed to reject item!', 'red');
+                            }
+                        },
+                        error: function () {
+                            showToast('Failed to communicate with the server!', 'red');
+                        }
+                    });
+                });
+            });
+
+            function showToast(message, backgroundColor) {
+                var toast = document.createElement('div');
+                toast.textContent = message;
+                toast.style.backgroundColor = backgroundColor;
+                toast.style.position = 'fixed';
+                toast.style.top = '10px';
+                toast.style.right = '10px';
+                toast.style.padding = '10px';
+                toast.style.borderRadius = '5px';
+                toast.style.color = 'white';
+                toast.style.zIndex = '9999';
+
+                document.body.appendChild(toast);
+
+                setTimeout(function () {
+                    document.body.removeChild(toast);
+                }, 3000);
+            }
+        });
+    </script>
+
+</body>
+</html>
+
